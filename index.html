@@ -2,67 +2,88 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>TRASANDINO AI CRM - Meta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRASANDINO AI CRM</title>
 </head>
 
 <body>
 
-<h1>TRASANDINO AI CRM</h1>
+  <h1>TRASANDINO AI CRM</h1>
+  <p>Prueba de conexión directa con Meta.</p>
 
-<button onclick="conectarMeta()">
-  CONECTAR CON META
-</button>
+  <button onclick="conectarMeta()">
+    CONECTAR CON META
+  </button>
 
-<p id="estado">Esperando conexión...</p>
+  <p id="estado">Esperando conexión...</p>
 
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId: '1962280114452695',
-      cookie: true,
-      xfbml: false,
-      version: 'v26.0'
-    });
+  <script>
+    window.fbAsyncInit = function() {
 
-    document.getElementById("estado").innerText =
-      "SDK de Meta cargado correctamente.";
-  };
-
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-
-    if (d.getElementById(id)) return;
-
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://connect.facebook.net/es_LA/sdk.js";
-
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-
-  function conectarMeta() {
-
-    document.getElementById("estado").innerText =
-      "Abriendo Meta...";
-
-    FB.login(function(response) {
-
-      console.log("RESPUESTA META:", response);
+      FB.init({
+        appId: '1962280114452695',
+        cookie: true,
+        xfbml: false,
+        version: 'v26.0'
+      });
 
       document.getElementById("estado").innerText =
-        JSON.stringify(response);
+        "SDK de Meta cargado correctamente.";
+    };
 
-    }, {
-      config_id: '928193306544182',
-      response_type: 'code',
-      override_default_response_type: true,
-      extras: {
-        setup: {},
-        featureType: 'whatsapp_business_app_onboarding'
-      }
-    });
-  }
-</script>
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+
+      if (d.getElementById(id)) return;
+
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/es_LA/sdk.js";
+
+      fjs.parentNode.insertBefore(js, fjs);
+
+    }(document, 'script', 'facebook-jssdk'));
+
+
+    function conectarMeta() {
+
+      document.getElementById("estado").innerText =
+        "Abriendo Meta...";
+
+      FB.login(function(response) {
+
+        console.log(
+          "RESPUESTA EMBEDDED SIGNUP:",
+          response
+        );
+
+        if (
+          response.authResponse &&
+          response.authResponse.code
+        ) {
+
+          document.getElementById("estado").innerText =
+            "META COMPLETÓ LA CONEXIÓN";
+
+        } else {
+
+          document.getElementById("estado").innerText =
+            "Meta no completó la conexión";
+
+        }
+
+      }, {
+        config_id: '928193306544182',
+        response_type: 'code',
+        override_default_response_type: true,
+        extras: {
+          setup: {},
+          featureType:
+            'whatsapp_business_app_onboarding'
+        }
+      });
+    }
+  </script>
 
 </body>
 </html>
