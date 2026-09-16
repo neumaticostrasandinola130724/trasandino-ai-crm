@@ -63,19 +63,54 @@
     );
 
     if (
-      response.authResponse &&
-      response.authResponse.code
-    ) {
+  response.authResponse &&
+  response.authResponse.code
+) {
 
+  const codigo = response.authResponse.code;
+
+  document.getElementById("estado").innerText =
+    "Guardando conexión con Meta...";
+
+  const urlAppsScript =
+    "https://script.google.com/macros/s/AKfycbzIePYGGgSwX4NHgyDcBe7DZSri_4RaSWX4TcwSRUgd95EeHllDHY64rz7fSQWRF3fZhA/exec";
+
+  const formulario = new URLSearchParams();
+  formulario.append("accion", "meta_conectar");
+  formulario.append("code", codigo);
+
+  fetch(urlAppsScript, {
+    method: "POST",
+    body: formulario
+  })
+  .then(respuesta => respuesta.json())
+  .then(datos => {
+
+    if (datos.ok) {
       document.getElementById("estado").innerText =
-        "META COMPLETÓ LA CONEXIÓN";
-
+        "META CONECTADO Y TOKEN GUARDADO";
     } else {
-
       document.getElementById("estado").innerText =
-        "Meta no completó la conexión";
-
+        "Meta respondió, pero no se pudo guardar la conexión.";
     }
+
+  })
+  .catch(error => {
+
+    console.error("Error al guardar conexión:", error);
+
+    document.getElementById("estado").innerText =
+      "Error al enviar la conexión al servidor.";
+  });
+
+} else {
+
+  document.getElementById("estado").innerText =
+    "Meta no completó la conexión";
+
+}
+
+     
 
   }, {
     config_id: '928193306544182',
